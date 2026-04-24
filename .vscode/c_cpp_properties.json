@@ -3,14 +3,14 @@
         {
             "name": "LineFollowerCar",
             "includePath": [
-                "e:\\cubemx project\\LineFollowerCar\\Core\\Inc",
-                "e:\\cubemx project\\LineFollowerCar\\Drivers\\STM32F1xx_HAL_Driver\\Inc",
-                "e:\\cubemx project\\LineFollowerCar\\Drivers\\STM32F1xx_HAL_Driver\\Inc\\Legacy",
-                "e:\\cubemx project\\LineFollowerCar\\Drivers\\CMSIS\\Device\\ST\\STM32F1xx\\Include",
-                "e:\\cubemx project\\LineFollowerCar\\Drivers\\CMSIS\\Include",
-                "e:\\cubemx project\\LineFollowerCar\\MDK-ARM",
-                "e:\\cubemx project\\LineFollowerCar\\Core\\Src",
-                "e:\\cubemx project\\LineFollowerCar\\Drivers\\STM32F1xx_HAL_Driver\\Src"
+                "${env:INTELLIGENTCAR}\\LineFollowerCar\\Core\\Inc",
+                "${env:INTELLIGENTCAR}\\LineFollowerCar\\Drivers\\STM32F1xx_HAL_Driver\\Inc",
+                "${env:INTELLIGENTCAR}\\LineFollowerCar\\Drivers\\STM32F1xx_HAL_Driver\\Inc\\Legacy",
+                "${env:INTELLIGENTCAR}\\LineFollowerCar\\Drivers\\CMSIS\\Device\\ST\\STM32F1xx\\Include",
+                "${env:INTELLIGENTCAR}\\LineFollowerCar\\Drivers\\CMSIS\\Include",
+                "${env:INTELLIGENTCAR}\\LineFollowerCar\\MDK-ARM",
+                "${env:INTELLIGENTCAR}\\LineFollowerCar\\Core\\Src",
+                "${env:INTELLIGENTCAR}\\LineFollowerCar\\Drivers\\STM32F1xx_HAL_Driver\\Src"
             ],
             "defines": [
                 "USE_HAL_DRIVER",
