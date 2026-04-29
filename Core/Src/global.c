@@ -13,12 +13,12 @@ uint8_t state[4];
 int last_error = 0;
 int correction = 0;
 
-const int BASE_SPEED = 60;       // 基准速度 0~100%，根据赛道抓地力调整
-float Kp = 0.3;                  // 比例系数 (0.3~1.5 之间调整)
-float Kd = 0.15;                 // 微分系数 (0.05~0.3)
+const int BASE_SPEED = 75;       // 基准速度 0~100%，根据赛道抓地力调整
+float Kp = 1.0;                  // 比例系数 (0.3~1.5 之间调整)
+float Kd = 0.05;                 // 微分系数 (0.05~0.3)
 float Ki = 0.000;                // 积分系数 (先设为 0，长直线偏航再加)
 const int DEADBAND = 1;          // 死区：误差绝对值小于此值视为直行，防止微抖
-const int LOCK_CORRECTION = 35;  // 全白脱线时的强制转向力度
+const int LOCK_CORRECTION = 5;  // 全白脱线时的强制转向力度
 
 
 
