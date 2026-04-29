@@ -7,9 +7,10 @@
 
 
 uint8_t state[4];
+uint8_t cmd[20];
 
 
-
+int error1,error2;
 int last_error = 0;
 int correction = 0;
 
@@ -26,10 +27,10 @@ void caculate_pid(void){
 
     int error = 0;
 
-    if(state[0]) error += -4;
-    if(state[1]) error +=  2;
-    if(state[2]) error += -2;
-    if(state[3]) error +=  4;
+    if(state[0]) error += -error2;
+    if(state[1]) error +=  error1;
+    if(state[2]) error += -error1;
+    if(state[3]) error +=  error2;
 
     if(abs(error)<=1) error = 0;
 

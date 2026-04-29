@@ -8,6 +8,9 @@
 
 
 
+void U1_printf (const uint8_t* pData );
+
+
 
 #endif
 

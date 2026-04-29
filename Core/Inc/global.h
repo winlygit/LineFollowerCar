@@ -3,9 +3,10 @@
 
 #include "main.h"
 
+extern uint8_t cmd[20];
+extern uint8_t state[4];
 
-
-
+extern int error1,error2;
 extern int last_error;
 extern int correction;
 
@@ -19,7 +20,7 @@ extern const int LOCK_CORRECTION;  // 全白脱线时的强制转向力度
 
 // extern struct speed;
 
-extern uint8_t state[4];
+
 
 
 
