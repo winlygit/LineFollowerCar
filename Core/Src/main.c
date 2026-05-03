@@ -85,7 +85,7 @@ int main(void)
 {
 
   /* USER CODE BEGIN 1 */
-
+  HAL_Delay(300);
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -113,22 +113,43 @@ int main(void)
   MX_USART1_UART_Init();
   /* USER CODE BEGIN 2 */
   Motor_Init();
-  HAL_Delay(1000);
+  servo_init();
+  
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+
+    if(start_flag){
     get_follower_sensor(state);
-    caculate_pid();
+    caculate_pid(state);
+
+
     motor_set(BASE_SPEED + correction, BASE_SPEED - correction);
     HAL_Delay(100);
 
-    /* USER CODE END WHILE */
 
-    /* USER CODE BEGIN 3 */
+  }else if(stop_flag){
+
+
+    motor_set(0, 0);
+
+    
   }
+
+    if(rxcplt_flag){
+        readcmd(cmd);
+        rxcplt_flag = 0;
+        ifrxstart = 0;
+    }
+
+
+    /* USER CODE END WHILE */
+  }
+    /* USER CODE BEGIN 3 */
+  
   /* USER CODE END 3 */
 }
 
@@ -224,9 +245,9 @@ static void MX_TIM2_Init(void)
 
   /* USER CODE END TIM2_Init 1 */
   htim2.Instance = TIM2;
-  htim2.Init.Prescaler = 7200-1;
+  htim2.Init.Prescaler = 0;
   htim2.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim2.Init.Period = 1000-1;
+  htim2.Init.Period = 65535;
   htim2.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim2.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
   if (HAL_TIM_Base_Init(&htim2) != HAL_OK)
