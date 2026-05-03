@@ -4,7 +4,16 @@
 #include "main.h"
 
 extern uint8_t cmd[20];
+extern volatile uint8_t speed[2];
+extern volatile uint8_t pulse[2]; 
+
 extern uint8_t state[4];
+extern uint8_t start_flag;
+extern uint8_t stop_flag;
+extern int LOCK_CORRECTION;
+extern volatile uint8_t uart_index;
+extern volatile uint8_t ifrxstart;
+extern volatile uint8_t rxcplt_flag;
 
 extern int error1,error2;
 extern int last_error;
@@ -28,7 +37,7 @@ extern const int LOCK_CORRECTION;  // 全白脱线时的强制转向力度
 
 
 
-void caculate_pid(void);
+void caculate_pid(uint8_t *state);
 
 
 #endif 

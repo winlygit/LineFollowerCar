@@ -5,6 +5,8 @@
 #include "global.h"
 
 
+void servo_init(void);
+void set_angle(uint8_t angle);
 
 
 
