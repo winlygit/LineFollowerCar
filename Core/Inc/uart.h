@@ -10,7 +10,7 @@
 
 void U1_printf (const uint8_t* pData );
 
-
+void readcmd(uint8_t* cmd);
 
 #endif
 

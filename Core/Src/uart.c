@@ -37,9 +37,9 @@ void U1_printf (const uint8_t* pData ) //向串口1发送数据
 }
 
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart){
-    uint8_t value;
+    
      if(huart->Instance == USART1){
-    if(value == 'A'){
+    if(value == '@'){
     uart_index = 0;
     ifrxstart = 1;
     }
@@ -63,7 +63,7 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart){
 
 
 void readcmd(uint8_t* cmd){
-    if(cmd[0]=='A'&&cmd[1]=='T'&&cmd[9]=='#'){
+    if(cmd[0]=='@'&&cmd[1]=='T'&&cmd[9]=='#'){
         if(cmd[2]=='C'&&cmd[3]=='M'&&cmd[4]=='D'){
             if(cmd[5]=='S'&&cmd[6]=='T'&&cmd[7]=='A'&&cmd[8]=='R'){
                 start_flag = 1;

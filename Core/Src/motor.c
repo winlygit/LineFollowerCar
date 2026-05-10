@@ -19,11 +19,11 @@ void Motor_Init(void)
 void motor_set(int L, int R)// L, R ¡Ê [-100, 100]
 {
     if (L > 0) {
-        __HAL_TIM_SetCompare(&htim3, TIM_CHANNEL_1, L);
-        __HAL_TIM_SetCompare(&htim3, TIM_CHANNEL_2, 0);
-    } else {
         __HAL_TIM_SetCompare(&htim3, TIM_CHANNEL_1, 0);
-        __HAL_TIM_SetCompare(&htim3, TIM_CHANNEL_2, -L);
+        __HAL_TIM_SetCompare(&htim3, TIM_CHANNEL_2, L);
+    } else {
+        __HAL_TIM_SetCompare(&htim3, TIM_CHANNEL_1, -L);
+        __HAL_TIM_SetCompare(&htim3, TIM_CHANNEL_2, 0);
     }
 
     if (R > 0) {

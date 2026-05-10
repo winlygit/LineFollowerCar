@@ -85,7 +85,6 @@ int main(void)
 {
 
   /* USER CODE BEGIN 1 */
-  HAL_Delay(300);
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -113,39 +112,64 @@ int main(void)
   MX_USART1_UART_Init();
   /* USER CODE BEGIN 2 */
   Motor_Init();
-  servo_init();
-  
+  HAL_Delay(20);
+  OLED_Init();
+  HAL_UART_Receive_IT(&huart1,&value,1);
+
+
+
+  char mKP[20];
+  char mKD[20];
+  char mbase[20];
+  char cor[4];
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-
+    HAL_Delay(10);
     if(start_flag){
     get_follower_sensor(state);
     caculate_pid(state);
+    HAL_UART_Transmit(&huart1,(uint8_t*)cor,4,HAL_MAX_DELAY);
 
-
-    motor_set(BASE_SPEED + correction, BASE_SPEED - correction);
-    HAL_Delay(100);
+    motor_set(BASE_SPEED - correction, BASE_SPEED + correction);
+    
 
 
   }else if(stop_flag){
 
 
     motor_set(0, 0);
-
     
   }
+
+
+
+    sprintf(mKP, "KP: %.2f", Kp);
+    sprintf(mKD, "KD: %.2f", Kd);
+    sprintf(mbase, "BASE: %d", BASE_SPEED);
+    sprintf(cor,"%4d",correction);
+  
+    
+  
+    OLED_NewFrame();
+    OLED_PrintString(0, 0, mKP, &font16x16, OLED_COLOR_NORMAL);
+    OLED_PrintString(0, 16, mKD, &font16x16, OLED_COLOR_NORMAL);
+    OLED_PrintString(0, 32, mbase, &font16x16, OLED_COLOR_NORMAL);
+
+   
+
 
     if(rxcplt_flag){
         readcmd(cmd);
         rxcplt_flag = 0;
         ifrxstart = 0;
+        OLED_PrintASCIIChar(0, 48, 'R', &afont12x6, OLED_COLOR_NORMAL);
     }
-
-
+ OLED_ShowFrame();
+}
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
