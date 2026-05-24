@@ -129,46 +129,60 @@ int main(void)
   while (1)
   {
     HAL_Delay(10);
-    if(start_flag){
+
+if(!cross_flag){
+  if(start_flag){
+
     get_follower_sensor(state);
-    caculate_pid(state);
-    HAL_UART_Transmit(&huart1,(uint8_t*)cor,4,HAL_MAX_DELAY);
 
-    motor_set(BASE_SPEED - correction, BASE_SPEED + correction);
-    
+      if(IFPID){
+      Calculate_pid(state);      //pid控制方式
+      }else{
+      CalculateIfelse(state_ifelse);    //if-else控制方式
+      }
 
-
+    motor_set(speed_L, speed_R);
+      
   }else if(stop_flag){
-
 
     motor_set(0, 0);
     
   }
+}
 
+//oled显示
 
-
-    sprintf(mKP, "KP: %.2f", Kp);
-    sprintf(mKD, "KD: %.2f", Kd);
-    sprintf(mbase, "BASE: %d", BASE_SPEED);
-    sprintf(cor,"%4d",correction);
+  sprintf(mKP, "KP: %.2f", Kp);
+  sprintf(mKD, "KD: %.2f", Kd);
+  sprintf(mbase, "BASE: %d", BASE_SPEED);
+  sprintf(cor,"cor:%4d",correction);
   
     
-  
+  if(IFPID){
     OLED_NewFrame();
-    OLED_PrintString(0, 0, mKP, &font16x16, OLED_COLOR_NORMAL);
-    OLED_PrintString(0, 16, mKD, &font16x16, OLED_COLOR_NORMAL);
+    OLED_PrintString(0, 0, "MODE: PID", &font16x16, OLED_COLOR_NORMAL);
+    OLED_PrintString(0, 16, mKP, &font16x16, OLED_COLOR_NORMAL);
+    OLED_PrintString(64, 16, mKD, &font16x16, OLED_COLOR_NORMAL);
     OLED_PrintString(0, 32, mbase, &font16x16, OLED_COLOR_NORMAL);
+    OLED_PrintString(0, 48, cor, &font16x16, OLED_COLOR_NORMAL);
+  }else{
+    OLED_NewFrame();
+    OLED_PrintString(0, 0, "MODE: IF-ELSE", &font16x16, OLED_COLOR_NORMAL);
+    OLED_PrintString(0, 16, state, &font16x16, OLED_COLOR_NORMAL);
+    OLED_PrintString(0, 32, mbase, &font16x16, OLED_COLOR_NORMAL); 
+    OLED_PrintString(0, 48, cor, &font16x16, OLED_COLOR_NORMAL);
+  }
 
-   
+  OLED_ShowFrame();
 
-
+//处理串口命令
     if(rxcplt_flag){
         readcmd(cmd);
         rxcplt_flag = 0;
         ifrxstart = 0;
-        OLED_PrintASCIIChar(0, 48, 'R', &afont12x6, OLED_COLOR_NORMAL);
     }
- OLED_ShowFrame();
+
+
 }
     /* USER CODE END WHILE */
 
