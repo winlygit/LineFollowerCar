@@ -42,15 +42,15 @@ extern int LOCK_CORRECTION;  // 全白脱线和急转弯时的强制转向力度
 // extern struct speed;
 
 typedef enum{
-    Normal = 1001,    // 正常状态
-    Left1 = 1101,     // 左偏轻微
-    Right1 = 1011,    // 右偏轻微
-    Left2 = 1110,     // 左偏严重
-    Right2 = 0111,    // 右偏严重
-    AllWhite = 1111,  // 全白状态
-    LeftAcute = 0001, // 左急转弯
-    RightAcute = 1000,// 右急转弯
-    Cross = 0000,     // 十字路口
+    Normal = 0x09,    // 正常状态  1001
+    Left1 = 0x0D,     // 左偏轻微  1101
+    Right1 = 0x0B,    // 右偏轻微  1011
+    Left2 = 0x0E,     // 左偏严重  1110
+    Right2 = 0x07,    // 右偏严重  0111
+    AllWhite = 0x0F,  // 全白状态  1111
+    LeftAcute = 0x01, // 左急转弯  0001
+    RightAcute = 0x08,// 右急转弯  1000
+    Cross = 0x00,     // 十字路口  0000
 }state_t;
 
 
@@ -61,6 +61,7 @@ typedef enum{
 
 
 void Calculate_pid(uint8_t *state);
+void CalculateIfelse(int state_ifelse);
 
 
 #endif 

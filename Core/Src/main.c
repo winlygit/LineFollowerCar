@@ -28,6 +28,7 @@
 #include "sensor.h"
 #include "uart.h"
 #include "motor.h"
+#include "servo.h"
 
 
 /* USER CODE END Includes */
@@ -74,7 +75,12 @@ static void MX_USART1_UART_Init(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-
+void oled_cai(void){
+    OLED_NewFrame();
+    OLED_DrawImage(0,0,&caiImg,OLED_COLOR_NORMAL);
+    OLED_ShowFrame();
+    HAL_Delay(3000);
+}
 /* USER CODE END 0 */
 
 /**
@@ -112,26 +118,29 @@ int main(void)
   MX_USART1_UART_Init();
   /* USER CODE BEGIN 2 */
   Motor_Init();
+  servo_init();
   HAL_Delay(20);
   OLED_Init();
   HAL_UART_Receive_IT(&huart1,&value,1);
+  oled_cai();
 
 
 
   char mKP[20];
   char mKD[20];
   char mbase[20];
-  char cor[4];
+  char cor[10];
+  char sta_char[8];
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-    HAL_Delay(10);
+    HAL_Delay(200);
 
 if(!cross_flag){
-  if(start_flag){
+  if(1/*start_flag*/){
 
     get_follower_sensor(state);
 
@@ -156,6 +165,7 @@ if(!cross_flag){
   sprintf(mKD, "KD: %.2f", Kd);
   sprintf(mbase, "BASE: %d", BASE_SPEED);
   sprintf(cor,"cor:%4d",correction);
+  sprintf(sta_char,"sta:%d%d%d%d",state[0],state[1],state[2],state[3]);
   
     
   if(IFPID){
@@ -168,7 +178,7 @@ if(!cross_flag){
   }else{
     OLED_NewFrame();
     OLED_PrintString(0, 0, "MODE: IF-ELSE", &font16x16, OLED_COLOR_NORMAL);
-    OLED_PrintString(0, 16, state, &font16x16, OLED_COLOR_NORMAL);
+    OLED_PrintString(0, 16, sta_char, &font16x16, OLED_COLOR_NORMAL);
     OLED_PrintString(0, 32, mbase, &font16x16, OLED_COLOR_NORMAL); 
     OLED_PrintString(0, 48, cor, &font16x16, OLED_COLOR_NORMAL);
   }
