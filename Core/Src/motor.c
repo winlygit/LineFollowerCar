@@ -16,23 +16,31 @@ void Motor_Init(void)
     __HAL_TIM_SetCompare(&htim3, TIM_CHANNEL_4, 0);
 }
 
-void motor_set(int L, int R)// L, R ¡Ê [-100, 100]
+void motor_set(int L, int R)// L, R ¡Ê [-1000, 1000]
 {
-    if (L > 0) {
+    if (R > 0) {
         __HAL_TIM_SetCompare(&htim3, TIM_CHANNEL_1, 0);
-        __HAL_TIM_SetCompare(&htim3, TIM_CHANNEL_2, L);
+        __HAL_TIM_SetCompare(&htim3, TIM_CHANNEL_2, R);
     } else {
-        __HAL_TIM_SetCompare(&htim3, TIM_CHANNEL_1, -L);
+        __HAL_TIM_SetCompare(&htim3, TIM_CHANNEL_1, -R);
         __HAL_TIM_SetCompare(&htim3, TIM_CHANNEL_2, 0);
     }
 
-    if (R > 0) {
-        __HAL_TIM_SetCompare(&htim3, TIM_CHANNEL_3, R);
+    if (L > 0) {
+        __HAL_TIM_SetCompare(&htim3, TIM_CHANNEL_3, L);
         __HAL_TIM_SetCompare(&htim3, TIM_CHANNEL_4, 0);
     } else {
         __HAL_TIM_SetCompare(&htim3, TIM_CHANNEL_3, 0);
-        __HAL_TIM_SetCompare(&htim3, TIM_CHANNEL_4, -R);
+        __HAL_TIM_SetCompare(&htim3, TIM_CHANNEL_4, -L);
     }
+}
+
+void motor_stop(void){
+    __HAL_TIM_SetCompare(&htim3, TIM_CHANNEL_1, 1000);
+    __HAL_TIM_SetCompare(&htim3, TIM_CHANNEL_2, 1000);
+    __HAL_TIM_SetCompare(&htim3, TIM_CHANNEL_3, 1000);
+    __HAL_TIM_SetCompare(&htim3, TIM_CHANNEL_4, 1000);
+    
 }
 
 

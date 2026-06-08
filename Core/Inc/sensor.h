@@ -4,7 +4,7 @@
 
 #include "main.h"
 
-void get_follower_sensor(uint8_t *state);
+uint8_t get_follower_sensor(void);
 
 
 #endif 

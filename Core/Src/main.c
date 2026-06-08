@@ -122,68 +122,64 @@ int main(void)
   HAL_Delay(20);
   OLED_Init();
   HAL_UART_Receive_IT(&huart1,&value,1);
-  oled_cai();
+//  oled_cai();
 
 
 
-  char mKP[20];
-  char mKD[20];
-  char mbase[20];
-  char cor[10];
-  char sta_char[8];
+//  char mKP[20];
+//  char mKD[20];
+//  char mbase[20];
+//  char cor[10];
+//  char sta_char[8];
+  HAL_Delay(2000);
+  motor_set(700,700);
+  HAL_Delay(200);
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-    HAL_Delay(200);
+    
 
-if(!cross_flag){
   if(1/*start_flag*/){
-
-    get_follower_sensor(state);
-
       if(IFPID){
       Calculate_pid(state);      //pid控制方式
       }else{
-      CalculateIfelse(state_ifelse);    //if-else控制方式
+      CalculateIfelse();    //if-else控制方式
       }
-
-    motor_set(speed_L, speed_R);
       
   }else if(stop_flag){
 
     motor_set(0, 0);
     
   }
-}
 
 //oled显示
 
-  sprintf(mKP, "KP: %.2f", Kp);
-  sprintf(mKD, "KD: %.2f", Kd);
-  sprintf(mbase, "BASE: %d", BASE_SPEED);
-  sprintf(cor,"cor:%4d",correction);
-  sprintf(sta_char,"sta:%d%d%d%d",state[0],state[1],state[2],state[3]);
-  
-    
-  if(IFPID){
-    OLED_NewFrame();
-    OLED_PrintString(0, 0, "MODE: PID", &font16x16, OLED_COLOR_NORMAL);
-    OLED_PrintString(0, 16, mKP, &font16x16, OLED_COLOR_NORMAL);
-    OLED_PrintString(64, 16, mKD, &font16x16, OLED_COLOR_NORMAL);
-    OLED_PrintString(0, 32, mbase, &font16x16, OLED_COLOR_NORMAL);
-    OLED_PrintString(0, 48, cor, &font16x16, OLED_COLOR_NORMAL);
-  }else{
-    OLED_NewFrame();
-    OLED_PrintString(0, 0, "MODE: IF-ELSE", &font16x16, OLED_COLOR_NORMAL);
-    OLED_PrintString(0, 16, sta_char, &font16x16, OLED_COLOR_NORMAL);
-    OLED_PrintString(0, 32, mbase, &font16x16, OLED_COLOR_NORMAL); 
-    OLED_PrintString(0, 48, cor, &font16x16, OLED_COLOR_NORMAL);
-  }
+//  sprintf(mKP, "KP: %.2f", Kp);
+//  sprintf(mKD, "KD: %.2f", Kd);
+//  sprintf(mbase, "BASE: %d", BASE_SPEED);
+//  sprintf(cor,"cor:%4d",correction);
+//  sprintf(sta_char,"sta:%d%d%d%d",state[0],state[1],state[2],state[3]);
+//  
+//    
+//  if(IFPID){
+//    OLED_NewFrame();
+//    OLED_PrintString(0, 0, "MODE: PID", &font16x16, OLED_COLOR_NORMAL);
+//    OLED_PrintString(0, 16, mKP, &font16x16, OLED_COLOR_NORMAL);
+//    OLED_PrintString(64, 16, mKD, &font16x16, OLED_COLOR_NORMAL);
+//    OLED_PrintString(0, 32, mbase, &font16x16, OLED_COLOR_NORMAL);
+//    OLED_PrintString(0, 48, cor, &font16x16, OLED_COLOR_NORMAL);
+//  }else{
+//    OLED_NewFrame();
+//    OLED_PrintString(0, 0, "MODE: IF-ELSE", &font16x16, OLED_COLOR_NORMAL);
+//    OLED_PrintString(0, 16, sta_char, &font16x16, OLED_COLOR_NORMAL);
+//    OLED_PrintString(0, 32, mbase, &font16x16, OLED_COLOR_NORMAL); 
+//    OLED_PrintString(0, 48, cor, &font16x16, OLED_COLOR_NORMAL);
+//  }
 
-  OLED_ShowFrame();
+//  OLED_ShowFrame();
 
 //处理串口命令
     if(rxcplt_flag){
@@ -338,9 +334,9 @@ static void MX_TIM3_Init(void)
 
   /* USER CODE END TIM3_Init 1 */
   htim3.Instance = TIM3;
-  htim3.Init.Prescaler = 72-1;
+  htim3.Init.Prescaler = 36-1;
   htim3.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim3.Init.Period = 100;
+  htim3.Init.Period = 999;
   htim3.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim3.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
   if (HAL_TIM_PWM_Init(&htim3) != HAL_OK)

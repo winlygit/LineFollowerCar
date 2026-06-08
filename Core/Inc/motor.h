@@ -6,8 +6,8 @@
 
 
 void Motor_Init(void);
-void motor_set(int L, int R);// L, R ¡Ê [-100, 100]
-
+void motor_set(int L, int R);// L, R ¡Ê [-1000, 1000]
+void motor_stop(void);
 
 
 

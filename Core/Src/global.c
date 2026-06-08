@@ -27,7 +27,7 @@ uint8_t value;
 
 int correction = 0;              //转向修正值
 int state_ifelse;
-const int BASE_SPEED = 65;       // 基准速度 0~100
+const int BASE_SPEED = 70;       // 基准速度 0~100
 int LOCK_CORRECTION = 10;  // 全白脱线时的强制转向力度
 
 
@@ -43,8 +43,8 @@ const int DEADBAND = 1;          // 死区：误差绝对值小于此值视为�
 
 /*****************IF-ELSE模式状态定义*****************/
 int state_ifelse;
-int cor1 = -3; // 轻微偏差的转向修正值
-int cor2 = -5; // 严重偏差的转向修正值
+int cor1 = -6; // 轻微偏差的转向修正值
+int cor2 = -12; // 严重偏差的转向修正值
 int last_cor = 0; // 上一次的状态
 
 float k = 1.2; 
@@ -93,6 +93,8 @@ void Calculate_pid(uint8_t *state) {
 
 void cross_deal(){
     
+    HAL_Delay(300);
+    motor_set(0,0);  //停车一下
     set_angle(90); 
     HAL_Delay(3000);
     set_angle(0);
@@ -100,70 +102,61 @@ void cross_deal(){
     cross_flag = 0;
 }
 
-void CalculateIfelse(int state_ifelse) {
-    switch (state_ifelse) {
-        case Normal:{         //正常状态
-            correction = 0;
-            speed_L = BASE_SPEED;
-            speed_R = BASE_SPEED;
-            break;
+void CalculateIfelse() {
+    if(X1==0&&X3==0&&X2==1&&X4==1) motor_set(600,600);
+		
+	if(X1==1&&X3==0&&X2==1&&X4==1) motor_set(680,520);   //小右转
+		
+	if(X1==0&&X3==1&&X2==1&&X4==1) motor_set(520,680);   //小左转
+	
+	if(X2==1&&X1==1&&X3==1&&X4==0) motor_set(880,320);   //大右转
+		
+	if(X2==0&&X1==1&&X3==1&&X4==1) motor_set(320,880);   //大左转
+		
+	
+	//拐大角度弯
+	if((X1==1&&X2==1&&X3==0&&X4==0)||(X1==0&&X2==1&&X3==0&&X4==0))
+	{
+        HAL_Delay(40);
+        if(X2==0&&X1==0&&X3==0&&X4==0){
+            cross_deal();
         }
-        case Left1:{
-            correction = cor1;
-            speed_L = BASE_SPEED + k*correction;
-            speed_R = BASE_SPEED - correction;
-            break;
+        
+        if((X1==1&&X2==1&&X3==0&&X4==0)||(X1==0&&X2==1&&X3==0&&X4==0)){
+            HAL_Delay(300);
+            motor_set(0,0);  //停车一下
+            HAL_Delay(500);
+            do
+            {
+                motor_set(500,-500);  //原地右转
+            }while(X1==0);
         }
-        case Right1:{
-            correction = -cor1;
-            speed_L = BASE_SPEED + k*correction;
-            speed_R = BASE_SPEED - correction;
-            break;
+        
+	}
+	
+	//拐大角度弯
+	if((X2==0&&X1==0&&X3==1&&X4==1)||(X2==0&&X1==0&&X3==0&&X4==1))
+	{
+        HAL_Delay(40);
+        if(X2==0&&X1==0&&X3==0&&X4==0){
+            cross_deal();
         }
-        case Left2:{
-            correction = cor2;
-            speed_L = BASE_SPEED + k*correction;
-            speed_R = BASE_SPEED - correction;
-            break;
+        
+        if((X2==0&&X1==0&&X3==1&&X4==1)||(X2==0&&X1==0&&X3==0&&X4==1)){
+            HAL_Delay(300);
+            motor_set(0,0);  //停车一下
+            HAL_Delay(500);
+            do
+            {
+                motor_set(-500,500);  //原地左转
+            }while(X3==0);
         }
-        case Right2:{
-            correction = -cor2;
-            speed_L = BASE_SPEED + k*correction;
-            speed_R = BASE_SPEED - correction;
-            break;
-        }
-        case AllWhite:{
-            if (last_cor < 0) {
-                correction = LOCK_CORRECTION;
-            } else if (last_cor > 0) {
-                correction = -LOCK_CORRECTION;
-            }
-            speed_L = BASE_SPEED + k*correction;
-            speed_R = BASE_SPEED - correction;
-            break;
-        }
-        case LeftAcute:{
-            // HAL_Delay(ACUTE_DELAY); // 延时等待车子到转弯位置
-            correction = cor2 * STRENGTHEN_ACUTE_TURN; // 急转弯加大转向力度
-            speed_L = BASE_SPEED + k*correction;
-            speed_R = BASE_SPEED - correction;
-            break;
-        }
-        case RightAcute:{
-            // HAL_Delay(ACUTE_DELAY); // 延时等待车子到转弯位置
-            correction = -cor2 * STRENGTHEN_ACUTE_TURN; // 急转弯加大转向力度
-            speed_L = BASE_SPEED + k*correction;
-            speed_R = BASE_SPEED - correction;
-            break;
-        }
-        case Cross:{            //十字路口刷卡
-            cross_flag = 1;
-            HAL_Delay(ACUTE_DELAY); // 延时等待车子完全进入十字路口
-            motor_set(0, 0); // 停车
-            cross_deal(); // 十字路口特殊处理函数
-            break;
-        }
-    }
+        
+        
+	}
+    
+    
+
 }
 
 

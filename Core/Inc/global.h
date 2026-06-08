@@ -7,6 +7,11 @@
 #define ACUTE_DELAY 200
 #define IFPID 0 // 1使用PID控制，0使用if-else控制
 #define STRENGTHEN_ACUTE_TURN 2 // 急转弯转向力度倍数
+#define X1 HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_13)
+#define X2 HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_12)
+#define X3 HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_14)
+#define X4 HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_15)
+
 
 
 extern uint8_t cmd[20];
@@ -42,15 +47,17 @@ extern int LOCK_CORRECTION;  // 全白脱线和急转弯时的强制转向力度
 // extern struct speed;
 
 typedef enum{
-    Normal = 0x09,    // 正常状态  1001
-    Left1 = 0x0D,     // 左偏轻微  1101
-    Right1 = 0x0B,    // 右偏轻微  1011
-    Left2 = 0x0E,     // 左偏严重  1110
-    Right2 = 0x07,    // 右偏严重  0111
-    AllWhite = 0x0F,  // 全白状态  1111
-    LeftAcute = 0x01, // 左急转弯  0001
-    RightAcute = 0x08,// 右急转弯  1000
-    Cross = 0x00,     // 十字路口  0000
+    Normal = 0x09,      // 正常状态  1001
+    AllWhite = 0x0F,    // 全白状态  1111
+    Left1 = 0x0D,       // 左偏轻微  1101
+    Right1 = 0x0B,      // 右偏轻微  1011
+    Left2 = 0x0E,       // 左偏严重  1110
+    Right2 = 0x07,      // 右偏严重  0111
+    LeftAcute1 = 0x01,  // 左急转弯  0001
+    RightAcute1 = 0x08, // 右急转弯  1000
+    LeftAcute2 = 0x03,  // 左急转弯  0011
+    RightAcute2 = 0x0C, // 右急转弯  1100
+    Cross = 0x00,       // 十字路口  0000
 }state_t;
 
 
@@ -61,7 +68,7 @@ typedef enum{
 
 
 void Calculate_pid(uint8_t *state);
-void CalculateIfelse(int state_ifelse);
+void CalculateIfelse(void);
 
 
 #endif 

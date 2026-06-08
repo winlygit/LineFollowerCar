@@ -3,13 +3,15 @@
 #include "global.h"
 
 
-void get_follower_sensor(uint8_t *state){
-
+uint8_t get_follower_sensor(void){
+    uint8_t state_ifelse;
+    uint8_t state[4];
     state[0] = HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_12);
     state[1] = HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_13);
     state[2] = HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_14);
     state[3] = HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_15);
     state_ifelse = state[0]*8 + state[1]*4 + state[2]*2 + state[3];
+    return state_ifelse;
 }
 
 
