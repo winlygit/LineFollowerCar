@@ -95,61 +95,77 @@ void cross_deal(){
     
     HAL_Delay(300);
     motor_set(0,0);  //停车一下
+    HAL_Delay(2000);
     set_angle(90); 
-    HAL_Delay(3000);
+    HAL_Delay(2000);
     set_angle(0);
-    HAL_Delay(3000);
+    HAL_Delay(1000);
     cross_flag = 0;
 }
 
 void CalculateIfelse() {
-    if(X1==0&&X3==0&&X2==1&&X4==1) motor_set(600,600);
+    if(X1==0&&X3==0&&X2==1&&X4==1) motor_set(660,635);
 		
-	if(X1==1&&X3==0&&X2==1&&X4==1) motor_set(680,520);   //小右转
+	if(X1==1&&X3==0&&X2==1&&X4==1) motor_set(790,530);   //小右转
 		
-	if(X1==0&&X3==1&&X2==1&&X4==1) motor_set(520,680);   //小左转
+	if(X1==0&&X3==1&&X2==1&&X4==1) motor_set(530,790);   //小左转
 	
-	if(X2==1&&X1==1&&X3==1&&X4==0) motor_set(880,320);   //大右转
+	if(X2==1&&X1==1&&X3==1&&X4==0) motor_set(970,370);   //大右转
 		
-	if(X2==0&&X1==1&&X3==1&&X4==1) motor_set(320,880);   //大左转
+	if(X2==0&&X1==1&&X3==1&&X4==1) motor_set(370,970);   //大左转
 		
 	
 	//拐大角度弯
 	if((X1==1&&X2==1&&X3==0&&X4==0)||(X1==0&&X2==1&&X3==0&&X4==0))
 	{
-        HAL_Delay(40);
+        HAL_Delay(50);
         if(X2==0&&X1==0&&X3==0&&X4==0){
             cross_deal();
+            if(X2==1&&X1==1&&X3==1&&X4==1){
+                do{
+                    motor_set(600,800);
+                }while(X2==0||X1==0||X3==0||X4==0);
+            }
         }
         
         if((X1==1&&X2==1&&X3==0&&X4==0)||(X1==0&&X2==1&&X3==0&&X4==0)){
-            HAL_Delay(300);
+            HAL_Delay(100);
             motor_set(0,0);  //停车一下
-            HAL_Delay(500);
+            HAL_Delay(50);
             do
             {
-                motor_set(500,-500);  //原地右转
-            }while(X1==0);
+                motor_set(800,-800);  //原地右转
+            }while(X4==0);
         }
         
 	}
+//    if(X1==1&&X2==1&&X3==1&&X4==1){
+//        do{
+//            motor_set(500,800);
+//            }while(X2==0||X1==0||X3==0||X4==0);
+//    }
 	
 	//拐大角度弯
 	if((X2==0&&X1==0&&X3==1&&X4==1)||(X2==0&&X1==0&&X3==0&&X4==1))
 	{
-        HAL_Delay(40);
+        HAL_Delay(50);
         if(X2==0&&X1==0&&X3==0&&X4==0){
             cross_deal();
+            if(X2==1&&X1==1&&X3==1&&X4==1){
+                do{
+                    motor_set(600,800);
+                }while(X2==0||X1==0||X3==0||X4==0);
+            }
         }
         
         if((X2==0&&X1==0&&X3==1&&X4==1)||(X2==0&&X1==0&&X3==0&&X4==1)){
-            HAL_Delay(300);
+            HAL_Delay(100);
             motor_set(0,0);  //停车一下
-            HAL_Delay(500);
+            HAL_Delay(50);
             do
             {
-                motor_set(-500,500);  //原地左转
-            }while(X3==0);
+                motor_set(-800,800);  //原地左转
+            }while(X2==0);
         }
         
         
