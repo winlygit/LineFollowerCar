@@ -134,10 +134,10 @@ void CalculateIfelse() {
                 do{
                     motor_set(600,800);
                 }while(X2==0||X1==0||X3==0||X4==0);
+                return;
             }
         }
         
-        if((X1==1&&X2==1&&X3==0&&X4==0)||(X1==0&&X2==1&&X3==0&&X4==0)){
             HAL_Delay(100);
             motor_set(0,0);  //停车一下
             HAL_Delay(50);
@@ -145,8 +145,6 @@ void CalculateIfelse() {
             {
                 motor_set(800,-800);  //原地右转
             }while(X4==0);
-        }
-        
     }
 //    if(X1==1&&X2==1&&X3==1&&X4==1){
 //        do{
@@ -164,10 +162,10 @@ void CalculateIfelse() {
                 do{
                     motor_set(600,800);
                 }while(X2==0||X1==0||X3==0||X4==0);
+                return;
             }
         }
-        
-        if((X2==0&&X1==0&&X3==1&&X4==1)||(X2==0&&X1==0&&X3==0&&X4==1)){
+
             HAL_Delay(100);
             motor_set(0,0);  //停车一下
             HAL_Delay(50);
@@ -175,7 +173,7 @@ void CalculateIfelse() {
             {
                 motor_set(-800,800);  //原地左转
             }while(X2==0);
-        }
+        
         
         
     }
