@@ -16,7 +16,6 @@ int speed_L,speed_R;
 uint8_t cmd[20];
 uint8_t start_flag = 0;
 uint8_t stop_flag = 0;
-uint8_t cross_flag = 0;
 
 volatile uint8_t uart_index = 0;
 volatile uint8_t ifrxstart = 0;
@@ -29,6 +28,10 @@ int correction = 0;              //转向修正值
 int state_ifelse;
 const int BASE_SPEED = 70;       // 基准速度 0~100
 int LOCK_CORRECTION = 10;  // 全白脱线时的强制转向力度
+
+volatile uint16_t count = 0;
+volatile uint8_t angle = 0;
+volatile uint8_t ffflag = 1;
 
 
 /**************PID模式参数定义**************/
@@ -92,32 +95,38 @@ void Calculate_pid(uint8_t *state) {
 */
 
 void cross_deal(){
-    
-    HAL_Delay(300);
+    count = 0;
+    ffflag = 1;
+
+    HAL_Delay(200);
     motor_set(0,0);  //停车一下
-    HAL_Delay(2000);
-    set_angle(90); 
-    HAL_Delay(2000);
-    set_angle(0);
-    HAL_Delay(1000);
-    cross_flag = 0;
+    HAL_TIM_Base_Start_IT(&htim2);
+    do{
+        set_angle(angle);
+    }while(angle < 89);
+    ffflag = 0;
+    do{
+        set_angle(angle);
+    }while(angle > 1);
+    
+    HAL_TIM_Base_Stop_IT(&htim2);
 }
 
 void CalculateIfelse() {
     if(X1==0&&X3==0&&X2==1&&X4==1) motor_set(660,635);
-		
-	if(X1==1&&X3==0&&X2==1&&X4==1) motor_set(790,530);   //小右转
-		
-	if(X1==0&&X3==1&&X2==1&&X4==1) motor_set(530,790);   //小左转
-	
-	if(X2==1&&X1==1&&X3==1&&X4==0) motor_set(970,370);   //大右转
-		
-	if(X2==0&&X1==1&&X3==1&&X4==1) motor_set(370,970);   //大左转
-		
-	
-	//拐大角度弯
-	if((X1==1&&X2==1&&X3==0&&X4==0)||(X1==0&&X2==1&&X3==0&&X4==0))
-	{
+        
+    if(X1==1&&X3==0&&X2==1&&X4==1) motor_set(790,530);   //小右转
+        
+    if(X1==0&&X3==1&&X2==1&&X4==1) motor_set(530,790);   //小左转
+    
+    if(X2==1&&X1==1&&X3==1&&X4==0) motor_set(970,370);   //大右转
+        
+    if(X2==0&&X1==1&&X3==1&&X4==1) motor_set(370,970);   //大左转
+        
+    
+    //拐大角度弯
+    if((X1==1&&X2==1&&X3==0&&X4==0)||(X1==0&&X2==1&&X3==0&&X4==0))
+    {
         HAL_Delay(50);
         if(X2==0&&X1==0&&X3==0&&X4==0){
             cross_deal();
@@ -138,16 +147,16 @@ void CalculateIfelse() {
             }while(X4==0);
         }
         
-	}
+    }
 //    if(X1==1&&X2==1&&X3==1&&X4==1){
 //        do{
 //            motor_set(500,800);
 //            }while(X2==0||X1==0||X3==0||X4==0);
 //    }
-	
-	//拐大角度弯
-	if((X2==0&&X1==0&&X3==1&&X4==1)||(X2==0&&X1==0&&X3==0&&X4==1))
-	{
+    
+    //拐大角度弯
+    if((X2==0&&X1==0&&X3==1&&X4==1)||(X2==0&&X1==0&&X3==0&&X4==1))
+    {
         HAL_Delay(50);
         if(X2==0&&X1==0&&X3==0&&X4==0){
             cross_deal();
@@ -169,7 +178,7 @@ void CalculateIfelse() {
         }
         
         
-	}
+    }
     
     
 
@@ -180,7 +189,21 @@ void CalculateIfelse() {
 
 
 
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim){
+    if(htim == &htim2){
+        count++;
+        if(count >= 11&&ffflag){
+            count = 0;
+            angle++;
+        }
+         if((count >= 11)&&(!ffflag)){
+            count = 0;
+            angle--;
+        }
 
+    }
+
+}
 
 
 

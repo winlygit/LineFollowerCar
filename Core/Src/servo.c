@@ -11,8 +11,8 @@ void servo_init(void){
 
 void set_angle(uint8_t angle){
     float add;
-    add = angle/9;
-    int compare = 5+add;
+    add = 10*angle/9;
+    int compare = 50+add;
     __HAL_TIM_SetCompare(&htim4,TIM_CHANNEL_4,compare);
 }
 
